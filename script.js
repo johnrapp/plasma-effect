@@ -21,7 +21,7 @@ function interval() {
 	then = now;
 }
 
-var pixels = [], resolution = 400;
+var pixels = [], resolution = 200;
 var pixelWidth, pixelHeight;
 function init() {
 	pixelWidth = width / resolution;
@@ -74,17 +74,20 @@ var SimplePlasma = function() {
 		for(var x = 0; x < resolution; x++) {
 			plasma[x] = [];
 			for(var y = 0; y < resolution; y++) {
-				plasma[x][y] = ((180 + (180 * Math.sin(x / 8))) + (180 + (180 * Math.sin(y / 8)))) / 2;
+				plasma[x][y] = ((127.5 + (127.5 * Math.sin(x / 8)))
+					+ (127.5 + (127.5 * Math.sin(y / 8)))
+					+ (127.5 + (127.5 * Math.sin((x + y) / 16.0)))
+					+ (127.5 + (127.5 * Math.sin(Math.sqrt((x - width / 2) * (x - width / 2) + (y - height / 2) * (y - height / 2)) / 8)))
+            		+ (127.5 + (127.5 * Math.sin(Math.sqrt(x * x + y * y) / 8)))) / 5;
 			}
 		}
 		var res = 360;
 		for(var i = 0; i < res; i++) {
-			palette.push(paletteGen3(i));
+			palette.push(paletteGen1(i));
 		}
 	};
 	this.generate = function(pixel, x, y, time) {
-		var color = (plasma[x][y] + time / 10) % 360;
-		return palette[Math.floor(plasma[x][y] + time / 10) % 360];
+		return palette[Math.floor(plasma[x][y] + time / 10) % 255];
 	};
 }
 
@@ -96,6 +99,17 @@ function paletteGen2(i) {
 }
 function paletteGen3(i) {
 	return new Color(Math.floor(127.5 + (127.5 * Math.cos(Math.PI * i / 127.5))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / 127.5))), 0);
+}
+var r1 = Math.random() * 128, r2 = Math.random() * 128, r3 = Math.random() * 128;
+function paletteGen4(i) {
+	return new Color(Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / r1))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / r2))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / r3))));
+}
+function paletteGen5(i) {
+	return new Color(Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / 16))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / 128))), 0);
+}
+var s1 = 0.9, s2 = 59.8, s3 = 64.1;
+function paletteGen6(i) {
+	return new Color(Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / s1))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / s2))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / s3))));
 }
 
 var Color = function(c1, c2, c3) {
