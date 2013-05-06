@@ -1,0 +1,30 @@
+<head>
+	<title>Project</title>
+		<style type="text/css">
+			body {
+				margin: 0px;
+			}
+			canvas {
+				z-index: 0;
+				box-shadow: 0px 0px 30px rgba(50, 50, 50, 0.75);
+			}
+			#fps {
+				z-index: 1;
+				color: #f00;
+				position: absolute;
+				top: 10px
+				left: 10px;
+			}
+			#debug {
+				color: #f00;
+				font-size: 20px;
+			}
+		</style>
+	<script type="text/javascript" src="Jquery.js"></script>
+	<script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+	<div id="fps"></div>
+	<canvas id="canvas" width="800" height="800"></canvas>
+	<div id="debug"></div>
+</body>
