@@ -21,7 +21,7 @@ function interval() {
 	then = now;
 }
 
-var pixels = [], resolution = 200;
+var pixels = [], resolution = 400;
 var pixelWidth, pixelHeight;
 function init() {
 	pixelWidth = width / resolution;
@@ -70,20 +70,24 @@ function setPixel(imageData, x, y, r, g, b, a) {
 var SimplePlasma = function() {
 	var plasma = [];
 	var palette = [];
+	var paletteGenerators = [new PaletteGenerator(32, 64, 128), new PaletteGenerator(0, 127.5, 127.5),
+		new PaletteGenerator(127.5, 127.5, 0), new PaletteGenerator(16, 127.5, 0),
+		new PaletteGenerator(Math.random() * 127.5, Math.random() * 127.5, Math.random() * 127.5)];
+
 	this.init = function() {
 		for(var x = 0; x < resolution; x++) {
 			plasma[x] = [];
 			for(var y = 0; y < resolution; y++) {
 				plasma[x][y] = ((127.5 + (127.5 * Math.sin(x / 8)))
 					+ (127.5 + (127.5 * Math.sin(y / 8)))
-					+ (127.5 + (127.5 * Math.sin((x + y) / 16.0)))
-					+ (127.5 + (127.5 * Math.sin(Math.sqrt((x - width / 2) * (x - width / 2) + (y - height / 2) * (y - height / 2)) / 8)))
-            		+ (127.5 + (127.5 * Math.sin(Math.sqrt(x * x + y * y) / 8)))) / 5;
+					+ (127.5 + (127.5 * Math.sin((x + y) / 8)))
+					+ (127.5 + (127.5 * Math.sin(Math.sqrt((x - width / 2) * (x - width / 2) + (y - height / 2) * (y - height / 2)) / 9)))
+            		+ (127.5 + (127.5 * Math.sin(Math.sqrt(x * x + y * y) / 8)))) / 4;
 			}
 		}
-		var res = 360;
+		var res = 255;
 		for(var i = 0; i < res; i++) {
-			palette.push(paletteGen1(i));
+			palette.push(paletteGenerators[0].get(i));
 		}
 	};
 	this.generate = function(pixel, x, y, time) {
@@ -91,25 +95,12 @@ var SimplePlasma = function() {
 	};
 }
 
-function paletteGen1(i) {
-	return new Color(Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / 32))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / 64))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / 128))));
-}
-function paletteGen2(i) {
-	return new Color(0, Math.floor(127.5 + (127.5 * Math.cos(Math.PI * i / 127.5))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / 127.5))));
-}
-function paletteGen3(i) {
-	return new Color(Math.floor(127.5 + (127.5 * Math.cos(Math.PI * i / 127.5))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / 127.5))), 0);
-}
-var r1 = Math.random() * 128, r2 = Math.random() * 128, r3 = Math.random() * 128;
-function paletteGen4(i) {
-	return new Color(Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / r1))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / r2))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / r3))));
-}
-function paletteGen5(i) {
-	return new Color(Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / 16))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / 128))), 0);
-}
-var s1 = 0.9, s2 = 59.8, s3 = 64.1;
-function paletteGen6(i) {
-	return new Color(Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / s1))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / s2))), Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / s3))));
+var PaletteGenerator = function(c1Modif, c2Modif, c3Modif) {
+	this.get = function(i) {
+		return new Color(c1Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c1Modif))) : 0,
+			c2Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c2Modif))) : 0,
+			c3Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c3Modif))) : 0);
+	};
 }
 
 var Color = function(c1, c2, c3) {
