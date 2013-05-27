@@ -32,12 +32,13 @@ function init() {
 			pixels[x].push(new Color(0, 0, 0));
 		}
 	}
-	current = new Plasma();
+	current = new SimplePlasma();
 	current.init();
 }
 
 var current;
 function update(time) {
+
 	imageData = ctx.createImageData(width, height);
 	for(var x = 0; x < resolution; x++) {
 		for(var y = 0; y < resolution; y++) {
@@ -66,11 +67,10 @@ function setPixel(imageData, x, y, r, g, b, a) {
     imageData.data[++index] = a;
 }
 
-var Plasma = function() {
+var SimplePlasma = function() {
 	var plasma = [];
 	var palette = [];
 	var paletteGenerators = [new PaletteGenerator(32, 64, 128), new PaletteGenerator(0, 127.5, 127.5),
-<<<<<<< HEAD
 		new PaletteGenerator(127.5, 127.5, 127.5),
 		new PaletteGenerator(127.5, 127.5, 0), new PaletteGenerator(16, 127.5, 0),
 		new PaletteGenerator(Math.random() * 127.5, Math.random() * 127.5, Math.random() * 127.5)];
@@ -83,16 +83,10 @@ var Plasma = function() {
 		{gen: function(x, y){return 127.5 + (127.5 * Math.sin(Math.sqrt(x * x + y * y) / 15))}, use: true},
 		{gen: function(x, y){return 127.5 + (127.5 * Math.sin((Math.atan2(height / 4 - y, width / 4 - x)) / .5))}, use: false}];
 
-=======
-		new PaletteGenerator(127.5, 127.5, 0), new PaletteGenerator(16, 127.5, 0),
-		new PaletteGenerator(Math.random() * 127.5, Math.random() * 127.5, Math.random() * 127.5)];
-
->>>>>>> bd9477b217dcf3ab02b8846e894afb7ad4677afb
 	this.init = function() {
 		for(var x = 0; x < resolution; x++) {
 			plasma[x] = [];
 			for(var y = 0; y < resolution; y++) {
-<<<<<<< HEAD
 				plasma[x][y] = 0;
 				var used = 0;
 				for(var i in plasmaGenerators) {
@@ -102,13 +96,6 @@ var Plasma = function() {
 					}	
 				}
 				plasma[x][y] /= used;
-=======
-				plasma[x][y] = ((127.5 + (127.5 * Math.sin(x / 8)))
-					+ (127.5 + (127.5 * Math.sin(y / 8)))
-					+ (127.5 + (127.5 * Math.sin((x + y) / 8)))
-					+ (127.5 + (127.5 * Math.sin(Math.sqrt((x - width / 2) * (x - width / 2) + (y - height / 2) * (y - height / 2)) / 9)))
-            		+ (127.5 + (127.5 * Math.sin(Math.sqrt(x * x + y * y) / 8)))) / 4;
->>>>>>> bd9477b217dcf3ab02b8846e894afb7ad4677afb
 			}
 		}
 		var res = 255;
