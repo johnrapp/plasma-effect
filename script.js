@@ -1,6 +1,6 @@
 var canvas, $canvas, ctx;
 var width, height;
-$(document).ready(function() {
+function start() {
 	canvas = document.getElementById('canvas');
 	var $canvas = $(canvas);
 	width = $canvas.width();
@@ -11,7 +11,7 @@ $(document).ready(function() {
 	init();
 	then = Date.now();
 	setInterval(interval, 1000 / 60);
-});
+}
 
 var then, $fps;
 function interval() {
@@ -44,7 +44,6 @@ function update(time) {
 		for(var y = 0; y < resolution; y++) {
 			var pixel = pixels[x][y];
 			pixel = current.generate(pixel, x, y, time);
-			//render(pixel, x, y);
 			for(var xx = 0; xx < pixelWidth; xx++) {
 				for(var yy = 0; yy < pixelHeight; yy++) {
     				setPixel(imageData, x * pixelWidth + xx, y * pixelHeight + yy, pixel.c1, pixel.c2, pixel.c3, 255);
@@ -98,35 +97,28 @@ var SimplePlasma = function() {
 				plasma[x][y] /= used;
 			}
 		}
-		var res = 255;
+		/*var res = 255;
 		for(var i = 0; i < res; i++) {
 			palette.push(paletteGenerators[0].get(i));
-		}
+		}*/
+		palette = paletteFromImg(Art.gradient);
 	};
 	this.generate = function(pixel, x, y, time) {
-		return palette[Math.floor(plasma[x][y] + time / 10) % 255];
+		return palette[Math.floor(plasma[x][y] + time / 10) % 100];
 	};
 }
 
-var PaletteGenerator = function(c1Modif, c2Modif, c3Modif) {
-	this.get = function(i) {
-		return new Color(c1Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c1Modif))) : 0,
-			c2Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c2Modif))) : 0,
-			c3Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c3Modif))) : 0);
-	};
-}
-
-var Color = function(c1, c2, c3) {
-	this.c1 = c1; this.c2 = c2; this.c3 = c3;
-	this.set = function(nc1, nc2, nc3) {
-		this.c1 = nc1; this.c2 = nc2; this.c3 = nc3;
+var Color = function(r, g, b, a) {
+	this.r = r; this.g = g; this.b = b; this.a = a;
+	this.set = function(nr, ng, nb, na) {
+		this.r = nr; this.g = ng; this.b = nb;this.a = na;
 		return this;
 	};
 	this.rgb = function() {
-		return 'rgb(' + this.c1 + ',' + this.c2 + ',' + this.c3 + ')';
+		return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
 	};
-	this.hsl = function() {
-		return 'hsl(' + this.c1 + ',' + this.c2 + '%,' + this.c3 + '%' + ')';
+	this.rgba = function() {
+		return 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')';
 	};
 }
 
