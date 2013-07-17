@@ -7,39 +7,32 @@ var PaletteGenerator = function(c1Modif, c2Modif, c3Modif) {
 }
 
 function paletteFromImg(img) {
+	//buggig
 	if(img.height < 1) return;
 	var palette = [];
-	var cnvs = document.createElement('canvas');
-	var cnvsctx = cnvs.getContext('2d');
-	cnvs.width = img.width;
-	cnvs.height = img.height;
-	cnvsctx.drawImage(img, 0, 0);
-	var imageData = cnvsctx.getImageData(0, 0, cnvs.width, cnvs.height);
-
+	canvas.width = img.width;
+	canvas.height = img.height;
+	ctx.drawImage(img, 0, 0);
+	var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 	for(var x = 0; x < imageData.width; x++){
 		palette.push(getPixel(imageData, x, 0));
 	}
+	canvas.width = 600;
+	canvas.height = 600;
 	return palette;
 }
-
-function getPixel(imageData, x, y) {
-    index = (x + y * imageData.width) * 4;
-	return new Color(imageData.data[index], imageData.data[++index],
-		imageData.data[++index], imageData.data[++index]);
+var callbacks = [];
+function onload(callback) {
+	callbacks.push(callback);
 }
 
 var dir = 'res/'
-var sources = ['gradient.png'], images = [];
+var sources = ['gradient4.png'], images = [];
 
 var Art = new function() {
-	this.imagesLoaded = function() {
+	onload(function() {
 		this.gradient = images[0];
-	}
-}
-
-function everythingLoaded() {
-	Art.imagesLoaded();
-	start();
+	});
 }
 
 $(document).ready(function() {
@@ -51,10 +44,22 @@ $(document).ready(function() {
 	}
 });
 
-
 var loadedImages = 0;
 var imageLoaded = function() {
 	if(++loadedImages >= images.length) {
-		everythingLoaded();
+		for (var i = 0; i < callbacks.length; i++) {
+			callbacks[i]();
+		}
 	}
+}
+var Color = function(red, green, blue, alpha) {
+	this.set = function(r, g, b, a) {
+		this.r = r; this.g = g; this.b = b;this.a = a;
+	}; this.set(red, green, blue, alpha);
+	this.rgb = function() {
+		return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+	};
+	this.rgba = function() {
+		return 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')';
+	};
 }

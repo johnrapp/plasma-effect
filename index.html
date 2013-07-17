@@ -4,9 +4,12 @@
 			body {
 				margin: 0px;
 			}
-			canvas {
+			#canvas {
 				z-index: 0;
 				box-shadow: 0px 0px 30px rgba(50, 50, 50, 0.75);
+			}
+			#hiddenCanvas {
+				visibility: hidden;
 			}
 			#fps {
 				z-index: 1;
@@ -21,11 +24,17 @@
 			}
 		</style>
 	<script type="text/javascript" src="Jquery.js"></script>
-	<script type="text/javascript" src="script.js"></script>
+	<script type="text/javascript" src="engine.js"></script>
 	<script type="text/javascript" src="palette.js"></script>
+	<script type="text/javascript" src="plasma.js"></script>
+	<script type="text/javascript" src="midpoint.js"></script>
+	<script type="text/javascript">
+
+	</script>
 </head>
 <body>
 	<div id="fps"></div>
-	<canvas id="canvas" width="800" height="800"></canvas>
+	<canvas id="canvas" width="9" height="9"></canvas>
+	<canvas id="hiddenCanvas"></canvas>
 	<div id="debug"></div>
 </body>
