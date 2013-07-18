@@ -4,11 +4,11 @@ $(document).ready(function() {
 	Engine.init();
 });
 var Engine = new function() {
-	var canvas, $canvas, ctx, then;
+	var $canvas, then;
 	var pixelWidth = 1, pixelHeight = 1;
 	var interval, current;
 	this.init = function() {
-		canvas = document.getElementById('canvas');
+		this.canvas = document.getElementById('canvas');
 		this.width = canvas.width;
 		this.height = canvas.height;
 		$canvas = $(canvas);
@@ -48,7 +48,9 @@ var Engine = new function() {
 		ctx.putImageData(imageData, 0, 0);
 	};
 	this.animate = function(gen, fps) {
+		this.stop();
 		current = gen;
+		fps = fps || 60;
 		interval = setInterval(update, 1000 / fps);
 	}
 	this.stop = function() {

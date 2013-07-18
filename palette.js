@@ -1,15 +1,19 @@
-var PaletteGenerator = function(c1Modif, c2Modif, c3Modif) {
-	this.get = function(i) {
-		return new Color(c1Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c1Modif))) : 0,
-			c2Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c2Modif))) : 0,
-			c3Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c3Modif))) : 0);
-	};
+function createPalette(res, r, g, b) {
+	var palette = [];
+	for(var i = 0; i < res; i++) {
+		palette[i] = new Color(r.start + ((r.end - r.start) * (i / res)),
+			g.start + ((g.end - g.start) * (i / res)),
+			b.start + ((b.end - b.start) * (i / res)));
+	}
+	return palette;
 }
 
 function paletteFromImg(img) {
 	//buggig
 	if(img.height < 1) return;
 	var palette = [];
+	var canvas = Engine.canvas;
+	var ctx = canvas.getContext('2d');
 	canvas.width = img.width;
 	canvas.height = img.height;
 	ctx.drawImage(img, 0, 0);
@@ -17,8 +21,8 @@ function paletteFromImg(img) {
 	for(var x = 0; x < imageData.width; x++){
 		palette.push(getPixel(imageData, x, 0));
 	}
-	canvas.width = 600;
-	canvas.height = 600;
+	canvas.width = 512;
+	canvas.height = 512;
 	return palette;
 }
 var callbacks = [];
@@ -27,11 +31,11 @@ function onload(callback) {
 }
 
 var dir = 'res/'
-var sources = ['gradient4.png'], images = [];
+var sources = ['texture2.png'], images = [];
 
 var Art = new function() {
 	onload(function() {
-		this.gradient = images[0];
+		this.texture = images[0];
 	});
 }
 

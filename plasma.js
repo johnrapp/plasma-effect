@@ -46,3 +46,10 @@ var SimplePlasma = function() {
 		return old;
 	}
 }
+var PaletteGenerator = function(c1Modif, c2Modif, c3Modif) {
+	this.get = function(i) {
+		return new Color(c1Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c1Modif))) : 0,
+			c2Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c2Modif))) : 0,
+			c3Modif > 0 ? Math.floor(127.5 + (127.5 * Math.sin(Math.PI * i / c3Modif))) : 0);
+	};
+}
